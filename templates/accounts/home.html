@@ -1,0 +1,13 @@
+<h1>Welcome, {{ user.username }}</h1>
+
+<h3>How can i help you?</h3>
+<ul>
+    <li><a href="{% url 'notes:list' %}">View My Notes</a></li>
+    <li><a href="{% url 'notes:create' %}">Create New Note</a></li>
+    <li><a href="{% url 'notes:public_feed' %}">Public Notes</a></li>
+</ul>
+
+<form action="{% url 'accounts:logout' %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Logout</buttom>
+</form>
