@@ -7,13 +7,24 @@ class NoteAdmin(admin.ModelAdmin):
 
     search_fields = ('title', 'owner')
 
-    ordering = ('created_at',)
+    ordering = ('-created_at',)
+
+    readonly_fields = ('created_at', 'updated_at')
 
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('content', 'user')
+    list_display = ('user', 'note', 'created_at')
 
-    search_fields = ('owner',)
+    search_fields = ('user', 'note')
 
-    ordering = ('created_at',)
+    ordering = ('-created_at',)
+
+
+@admin.register(Like)
+class LikeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'note', 'created_at')
+
+    search_fields = ('user', 'note')
+
+    ordering = ('-created_at',)
