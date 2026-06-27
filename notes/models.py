@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxLengthValidator
 from django.conf import settings
 
 class Note(models.Model):
@@ -9,7 +10,7 @@ class Note(models.Model):
     )
 
     title = models.CharField(max_length=150)
-    content = models.TextField()
+    content = models.TextField(validators=[MaxLengthValidator(4000)])
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -26,7 +27,7 @@ class Note(models.Model):
 class Comment(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField(validators=[MaxLengthValidator(1200)])
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
