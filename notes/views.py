@@ -82,7 +82,11 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
 
 @login_required
 def add_comment(request, pk):
-    note = get_object_or_404(Note, pk=pk)
+    note = get_object_or_404(
+        Note.objects.filter(is_public=True),
+        pk=pk
+    )
+
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
