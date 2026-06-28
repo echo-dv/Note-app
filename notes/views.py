@@ -111,5 +111,8 @@ def toggle_like(request, pk):
 
     if not created:
         like.delete()
+        liked = False
+    else:
+        liked = True
     
-    return JsonResponse({'like_count': note.likes.count()})
+    return JsonResponse({'like_count': note.likes.count(), 'liked': liked})
