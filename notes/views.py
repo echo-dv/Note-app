@@ -4,6 +4,7 @@ from django.views.generic import ListView, UpdateView, DeleteView, CreateView, D
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 from .models import Note, Like
 from .forms import NoteForm, CommentForm
 
@@ -61,6 +62,13 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
     model = Note
     template_name = 'notes/note_detail.html'
     context_object_name = 'note'
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Note.objects.filter(
+            Q(owner=user) | Q(is_public=True)
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
