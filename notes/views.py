@@ -99,7 +99,10 @@ def add_comment(request, pk):
 
 @login_required
 def toggle_like(request, pk):
-    note = get_object_or_404(Note, pk=pk)
+    note = get_object_or_404(
+        Note.objects.filter(is_public=True),
+        pk=pk
+    )
 
     if note.owner == request.user:
         return JsonResponse({'error': "you can't like your note"})
