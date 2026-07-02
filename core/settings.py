@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.auth',
+    'django_smart_ratelimit',
 ]
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
