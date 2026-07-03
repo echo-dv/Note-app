@@ -1,4 +1,4 @@
-def rate_key(group, request):
+def rate_key(group, request, *_, **__):
     if request.user.is_authenticated:
         return f"user:{request.user.id}"
     
