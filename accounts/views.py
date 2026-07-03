@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LoginView, LogoutView
 from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,3 +25,8 @@ class CustomRegisterView(CreateView):
 @method_decorator(rate_limit(key=rate_key, rate="60/m", algorithm="token_bucket", algorithm_config={'bucket_size': 40, 'refill': 60 / 60}), name="dispatch")
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/home.html"
+
+
+@method_decorator(rate_limit(key=rate_key, rate="30/m", algorithm="token_bucket", algorithm_config={'bucket_size': 10, 'refill': 30 / 60}), name="dispatch")
+class CustomLogoutview(LogoutView):
+    pass
