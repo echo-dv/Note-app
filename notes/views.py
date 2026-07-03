@@ -7,8 +7,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from .models import Note, Like
 from .forms import NoteForm, CommentForm
+from django_smart_ratelimit.decorator import rate_limit
+from django.utils.decorators import method_decorator
+from core.ratelimit_key import rate_key
 
 
+@method_decorator(rate_limit(key=rate_key, rate="900/h", algorithm="token_bucket", algorithm_config={'bucket_size': 30, 'refill': 900 / 3600}), name="dispatch")
 class NoteListView(LoginRequiredMixin, ListView):
     model = Note
     template_name = "notes/note_list.html"
@@ -16,8 +20,9 @@ class NoteListView(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
-    
-    
+
+
+@method_decorator(rate_limit(key=rate_key, rate="900/h", algorithm="token_bucket", algorithm_config={'bucket_size': 30, 'refill': 900 / 3600}), name="dispatch")
 class PublicFeedView(ListView):
     model = Note
     template_name = 'notes/public_feed.html'
@@ -27,6 +32,7 @@ class PublicFeedView(ListView):
         return Note.objects.filter(is_public=True).order_by('-created_at')
     
     
+@method_decorator(rate_limit(key=rate_key, rate="300/h", algorithm="token_bucket", algorithm_config={'bucket_size': 20, 'refill': 300 / 3600}), name="dispatch")
 class NoteCreateView(LoginRequiredMixin, CreateView):
     model = Note
     template_name = "notes/note_form.html"
@@ -37,7 +43,8 @@ class NoteCreateView(LoginRequiredMixin, CreateView):
         form.instance.owner = self.request.user
         return super().form_valid(form)
     
-    
+
+@method_decorator(rate_limit(key=rate_key, rate="600/h", algorithm="token_bucket", algorithm_config={'bucket_size': 30, 'refill': 600 / 3600}), name="dispatch")  
 class NoteUpdateView(LoginRequiredMixin, UpdateView):
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
@@ -48,6 +55,7 @@ class NoteUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('notes:list')
     
 
+@method_decorator(rate_limit(key=rate_key, rate="120/h", algorithm="token_bucket", algorithm_config={'bucket_size': 15, 'refill': 120 / 3600}), name="dispatch")
 class NoteDeleteView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Note.objects.filter(owner=self.request.user)
@@ -57,7 +65,7 @@ class NoteDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('notes:list')
 
 
-
+@method_decorator(rate_limit(key=rate_key, rate="2000/h", algorithm="token_bucket", algorithm_config={'bucket_size': 40, 'refill': 2000 / 3600}), name="dispatch")
 class NoteDetailView(LoginRequiredMixin, DetailView):
     model = Note
     template_name = 'notes/note_detail.html'
@@ -80,6 +88,7 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
         return context
     
 
+@rate_limit(key=rate_key, rate="300/h", algorithm="token_bucket", algorithm_config={'bucket_size': 15, 'refill': 300 / 3600})
 @login_required
 def add_comment(request, pk):
     note = get_object_or_404(
@@ -97,6 +106,7 @@ def add_comment(request, pk):
     return redirect('notes:detail', pk=pk)
 
 
+@rate_limit(key=rate_key, rate="600/h", algorithm="token_bucket", algorithm_config={'bucket_size': 30, 'refill': 300 / 3600})
 @login_required
 def toggle_like(request, pk):
     note = get_object_or_404(
