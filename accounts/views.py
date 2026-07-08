@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, TemplateView
 from django_smart_ratelimit.decorator import rate_limit
 from django.utils.decorators import method_decorator
-from core.ratelimit_key import rate_key
+from common.ratelimit_key import rate_key
 
 
 @method_decorator(rate_limit(key=rate_key, rate="30/h", algorithm="token_bucket", algorithm_config={'bucket_size': 5, 'refill': 30 / 3600}), name="dispatch")

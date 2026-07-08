@@ -9,7 +9,7 @@ from .models import Note, Like
 from .forms import NoteForm, CommentForm
 from django_smart_ratelimit.decorator import rate_limit
 from django.utils.decorators import method_decorator
-from core.ratelimit_key import rate_key
+from common.ratelimit_key import rate_key
 
 
 @method_decorator(rate_limit(key=rate_key, rate="900/h", algorithm="token_bucket", algorithm_config={'bucket_size': 30, 'refill': 900 / 3600}), name="dispatch")
