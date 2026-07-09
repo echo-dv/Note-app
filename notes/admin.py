@@ -1,30 +1,31 @@
 from django.contrib import admin
 from .models import Note, Comment, Like
 
+
 @admin.register(Note)
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_at', 'owner', 'is_public')
+    list_display = ("title", "created_at", "owner", "is_public")
 
-    search_fields = ('title', 'owner')
+    search_fields = ("title", "owner")
 
-    ordering = ('-created_at',)
+    ordering = ("-created_at",)
 
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ("created_at", "updated_at")
 
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'note', 'created_at')
+    list_display = ("user", "note", "created_at")
 
-    search_fields = ('user', 'note')
+    search_fields = ("user", "note")
 
-    ordering = ('-created_at',)
+    ordering = ("-created_at",)
 
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'note', 'created_at')
+    list_display = ("user", "note", "created_at")
 
-    search_fields = ('user', 'note')
+    search_fields = ("user", "note")
 
-    ordering = ('-created_at',)
+    ordering = ("-created_at",)

@@ -8,25 +8,57 @@ from django.utils.decorators import method_decorator
 from common.ratelimit_key import rate_key
 
 
-@method_decorator(rate_limit(key=rate_key, rate="30/h", algorithm="token_bucket", algorithm_config={'bucket_size': 5, 'refill': 30 / 3600}), name="dispatch")
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="30/h",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 5, "refill": 30 / 3600},
+    ),
+    name="dispatch",
+)
 class CustomLoginView(LoginView):
-    template_name = 'accounts/login.html'
+    template_name = "accounts/login.html"
     redirect_authenticated_user = True
-    success_url = reverse_lazy('accounts:home')
+    success_url = reverse_lazy("accounts:home")
 
 
-@method_decorator(rate_limit(key=rate_key, rate="30/h", algorithm="token_bucket", algorithm_config={'bucket_size': 5, 'refill': 30 / 3600}), name="dispatch")
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="30/h",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 5, "refill": 30 / 3600},
+    ),
+    name="dispatch",
+)
 class CustomRegisterView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'accounts/register.html'
-    success_url = reverse_lazy('accounts:login')
-    
+    template_name = "accounts/register.html"
+    success_url = reverse_lazy("accounts:login")
 
-@method_decorator(rate_limit(key=rate_key, rate="60/m", algorithm="token_bucket", algorithm_config={'bucket_size': 40, 'refill': 60 / 60}), name="dispatch")
+
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="60/m",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 40, "refill": 60 / 60},
+    ),
+    name="dispatch",
+)
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/home.html"
 
 
-@method_decorator(rate_limit(key=rate_key, rate="30/m", algorithm="token_bucket", algorithm_config={'bucket_size': 10, 'refill': 30 / 60}), name="dispatch")
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="30/m",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 10, "refill": 30 / 60},
+    ),
+    name="dispatch",
+)
 class CustomLogoutview(LogoutView):
     pass
