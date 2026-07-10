@@ -3,6 +3,11 @@ from django.core.validators import MaxLengthValidator
 from django.conf import settings
 
 
+class NoteQuerySet(models.QuerySet):
+    def public(self):
+        return self.filter(is_public=True)
+
+
 class Note(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notes"
@@ -15,6 +20,8 @@ class Note(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     is_public = models.BooleanField(default=False)
+
+    objects = NoteQuerySet.as_manager()
 
     def __str__(self):
         return self.title

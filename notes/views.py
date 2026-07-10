@@ -51,7 +51,7 @@ class PublicFeedView(ListView):
     context_object_name = "notes"
 
     def get_queryset(self):
-        return Note.objects.filter(is_public=True).order_by("-created_at")
+        return Note.objects.public().order_by("-created_at")
 
 
 @method_decorator(
@@ -150,7 +150,7 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
 )
 @login_required
 def add_comment(request, pk):
-    note = get_object_or_404(Note.objects.filter(is_public=True), pk=pk)
+    note = get_object_or_404(Note.objects.public(), pk=pk)
 
     if request.method == "POST":
         form = CommentForm(request.POST)
@@ -170,7 +170,7 @@ def add_comment(request, pk):
 )
 @login_required
 def toggle_like(request, pk):
-    note = get_object_or_404(Note.objects.filter(is_public=True), pk=pk)
+    note = get_object_or_404(Note.objects.public(), pk=pk)
 
     if note.owner == request.user:
         return JsonResponse({"error": "you can't like your note"})
