@@ -46,4 +46,6 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ["user", "note"]
+        constraints = [
+            models.UniqueConstraint(fields=["user", "note"], name="uniq_like_user_note")
+        ]
