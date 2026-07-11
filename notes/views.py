@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.views.generic import (
     ListView,
     UpdateView,
@@ -169,6 +170,7 @@ def add_comment(request, pk):
     algorithm_config={"bucket_size": 30, "refill": 300 / 3600},
 )
 @login_required
+@require_POST
 def toggle_like(request, pk):
     note = get_object_or_404(Note.objects.public(), pk=pk)
 
