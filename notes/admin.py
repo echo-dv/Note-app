@@ -3,9 +3,9 @@ from .models import Note, Comment, Like
 
 @admin.register(Note)
 class NoteAdmin(admin.ModelAdmin):
-    list_display = ('title', 'created_at', 'owner', 'is_public')
+    list_display = ('title', 'created_at', 'owner__username', 'is_public')
 
-    search_fields = ('title', 'owner')
+    search_fields = ('title', 'owner__username')
 
     ordering = ('-created_at',)
 
@@ -14,17 +14,17 @@ class NoteAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('user', 'note', 'created_at')
+    list_display = ('user__username', 'note__title', 'created_at')
 
-    search_fields = ('user', 'note')
+    search_fields = ('user__username', 'note__title')
 
     ordering = ('-created_at',)
 
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
-    list_display = ('user', 'note', 'created_at')
+    list_display = ('user__username', 'note__title', 'created_at')
 
-    search_fields = ('user', 'note')
+    search_fields = ('user__username', 'note__title')
 
     ordering = ('-created_at',)
