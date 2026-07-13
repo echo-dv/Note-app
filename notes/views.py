@@ -50,6 +50,7 @@ class PublicFeedView(ListView):
     model = Note
     template_name = "notes/public_feed.html"
     context_object_name = "notes"
+    paginate_by = 15
 
     def get_queryset(self):
         return Note.objects.public().order_by("-created_at")
