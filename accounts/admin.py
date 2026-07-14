@@ -18,6 +18,8 @@ class CustomUserAdmin(UserAdmin):
 
     ordering = ("-date_joined",)
 
+    readonly_fields = ("date_joined", "last_login")
+
     fieldsets = (
         (None, {"fields": ("username", "password")}),
         ("Personal Info", {"fields": ("first_name", "last_name", "email")}),
