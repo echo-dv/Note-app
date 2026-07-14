@@ -15,7 +15,7 @@ from common.ratelimit_key import rate_key
         algorithm="token_bucket",
         algorithm_config={"bucket_size": 5, "refill": 30 / 3600},
     ),
-    name="dispatch",
+    name="post",
 )
 class CustomLoginView(LoginView):
     template_name = "accounts/login.html"
@@ -30,7 +30,7 @@ class CustomLoginView(LoginView):
         algorithm="token_bucket",
         algorithm_config={"bucket_size": 5, "refill": 30 / 3600},
     ),
-    name="dispatch",
+    name="post",
 )
 class CustomRegisterView(CreateView):
     form_class = CustomUserCreationForm
