@@ -152,16 +152,17 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
     algorithm_config={"bucket_size": 15, "refill": 300 / 3600},
 )
 @login_required
+@require_POST
 def add_comment(request, pk):
     note = get_object_or_404(Note.objects.public(), pk=pk)
 
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.user = request.user
-            comment.note = note
-            comment.save()
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.user = request.user
+        comment.note = note
+        comment.save()
+
     return redirect("notes:detail", pk=pk)
 
 
