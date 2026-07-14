@@ -20,7 +20,6 @@ from common.ratelimit_key import rate_key
 class CustomLoginView(LoginView):
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
-    success_url = reverse_lazy("accounts:home")
 
 
 @method_decorator(
