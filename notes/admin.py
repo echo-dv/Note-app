@@ -21,6 +21,8 @@ class CommentAdmin(admin.ModelAdmin):
 
     ordering = ("-created_at",)
 
+    readonly_fields = ("created_at",)
+
 
 @admin.register(Like)
 class LikeAdmin(admin.ModelAdmin):
@@ -29,3 +31,5 @@ class LikeAdmin(admin.ModelAdmin):
     search_fields = ("user", "note")
 
     ordering = ("-created_at",)
+
+    readonly_fields = ("created_at",)
