@@ -170,7 +170,7 @@ def add_comment(request, pk):
     key=rate_key,
     rate="600/h",
     algorithm="token_bucket",
-    algorithm_config={"bucket_size": 30, "refill": 300 / 3600},
+    algorithm_config={"bucket_size": 30, "refill": 600 / 3600},
 )
 @login_required
 @require_POST
