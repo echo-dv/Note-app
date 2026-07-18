@@ -32,7 +32,7 @@ class Note(models.Model):
 
 class Comment(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name="comments")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField(validators=[MaxLengthValidator(1200)])
     created_at = models.DateTimeField(auto_now_add=True)
 

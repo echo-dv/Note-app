@@ -15,9 +15,9 @@ class NoteAdmin(admin.ModelAdmin):
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ("user", "note", "created_at")
+    list_display = ("owner", "note", "created_at")
 
-    search_fields = ("user", "note")
+    search_fields = ("owner", "note")
 
     ordering = ("-created_at",)
 
