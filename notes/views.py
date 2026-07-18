@@ -138,7 +138,7 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
         context["comment_form"] = CommentForm()
         context["comments"] = self.object.comments.all()
         context["user_liked"] = self.object.likes.filter(
-            user=self.request.user
+            owner=self.request.user
         ).exists()
         context["like_count"] = self.object.likes.count()
 
@@ -180,7 +180,7 @@ def toggle_like(request, pk):
     if note.owner == request.user:
         return JsonResponse({"error": "you can't like your note"})
 
-    like, created = Like.objects.get_or_create(note=note, user=request.user)
+    like, created = Like.objects.get_or_create(note=note, owner=request.user)
 
     if not created:
         like.delete()

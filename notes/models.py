@@ -42,10 +42,10 @@ class Comment(models.Model):
 
 class Like(models.Model):
     note = models.ForeignKey(Note, on_delete=models.CASCADE, related_name="likes")
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "note"], name="uniq_like_user_note")
+            models.UniqueConstraint(fields=["owner", "note"], name="uniq_like_user_note")
         ]
