@@ -1,4 +1,4 @@
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView as DjangoLogoutView
 from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -17,7 +17,7 @@ from common.ratelimit_key import rate_key
     ),
     name="post",
 )
-class CustomLoginView(LoginView):
+class LoginView(DjangoLoginView):
     template_name = "accounts/login.html"
     redirect_authenticated_user = True
 
@@ -31,7 +31,7 @@ class CustomLoginView(LoginView):
     ),
     name="post",
 )
-class CustomRegisterView(CreateView):
+class RegisterView(CreateView):
     form_class = CustomUserCreationForm
     template_name = "accounts/register.html"
     success_url = reverse_lazy("accounts:login")
@@ -59,5 +59,5 @@ class HomeView(LoginRequiredMixin, TemplateView):
     ),
     name="dispatch",
 )
-class CustomLogoutview(LogoutView):
+class LogoutView(DjangoLogoutView):
     pass
