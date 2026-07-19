@@ -54,7 +54,7 @@ class PublicFeedView(ListView):
     paginate_by = 15
 
     def get_queryset(self):
-        return Note.objects.public().order_by("-created_at")
+        return Note.objects.public().select_related("owner").order_by("-created_at")
 
 
 @method_decorator(
