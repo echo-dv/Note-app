@@ -11,8 +11,8 @@ from django.views.generic import (
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
-from .models import Note, Like
+from django.db.models import Q, Prefetch
+from .models import Note, Like, Comment
 from .forms import NoteForm, CommentForm
 from django_smart_ratelimit.decorator import rate_limit
 from django.utils.decorators import method_decorator
@@ -131,8 +131,12 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         user = self.request.user
 
-        return Note.objects.filter(Q(owner=user) | Q(is_public=True)).select_related(
-            "owner"
+        return (
+            Note.objects.filter(Q(owner=user) | Q(is_public=True))
+            .select_related("owner")
+            .prefetch_related(
+                Prefetch("comments", queryset=Comment.objects.select_related("owner"))
+            )
         )
 
     def get_context_data(self, **kwargs):
