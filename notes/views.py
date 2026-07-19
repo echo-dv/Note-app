@@ -131,7 +131,9 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         user = self.request.user
 
-        return Note.objects.filter(Q(owner=user) | Q(is_public=True))
+        return Note.objects.filter(Q(owner=user) | Q(is_public=True)).select_related(
+            "owner"
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
