@@ -11,7 +11,7 @@ from django.views.generic import (
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q, Prefetch
+from django.db.models import Q, Prefetch, Count, Exists, OuterRef
 from .models import Note, Like, Comment
 from .forms import NoteForm, CommentForm
 from django_smart_ratelimit.decorator import rate_limit
@@ -137,16 +137,18 @@ class NoteDetailView(LoginRequiredMixin, DetailView):
             .prefetch_related(
                 Prefetch("comments", queryset=Comment.objects.select_related("owner"))
             )
+            .annotate(
+                like_count=Count("likes", distinct=True),
+                user_liked=Exists(Like.objects.filter(note=OuterRef("pk"), owner=user)),
+            )
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["comment_form"] = CommentForm()
         context["comments"] = self.object.comments.all()
-        context["user_liked"] = self.object.likes.filter(
-            owner=self.request.user
-        ).exists()
-        context["like_count"] = self.object.likes.count()
+        context["user_liked"] = self.object.user_liked
+        context["like_count"] = self.object.like_count
 
         return context
 
