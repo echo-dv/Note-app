@@ -1,4 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm
+from django import forms
 from .models import CustomUser
 
 
@@ -6,6 +7,9 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = CustomUser
         fields = ("username", "first_name", "last_name", "bio", "email")
+        widgets = {
+            "bio": forms.Textarea(attrs={"rows": 4, "placeholder": "About you..."})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
