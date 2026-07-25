@@ -12,6 +12,7 @@ from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Prefetch, Count, Exists, OuterRef
+from django.db import transaction
 from .models import Note, Like, Comment
 from .forms import NoteForm, CommentForm
 from django_smart_ratelimit.decorator import rate_limit
@@ -188,12 +189,20 @@ def toggle_like(request, pk):
     if note.owner == request.user:
         return JsonResponse({"error": "you can't like your note"})
 
-    like, created = Like.objects.get_or_create(note=note, owner=request.user)
+    with transaction.atomic():
+        like = (
+            Like.objects.select_for_update()
+            .filter(note=note, owner=request.user)
+            .first()
+        )
 
-    if not created:
-        like.delete()
-        liked = False
-    else:
-        liked = True
+        if like:
+            like.delete()
+            liked = False
+        else:
+            Like.objects.create(note=note, owner=request.user)
+            liked = True
 
-    return JsonResponse({"like_count": note.likes.count(), "liked": liked})
+        like_count = note.likes.count()
+
+    return JsonResponse({"like_count": like_count, "liked": liked})
