@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Note, Comment, Like
+
+from .models import Comment, Like, Note
 
 
 @admin.register(Note)

@@ -1,11 +1,14 @@
-from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView as DjangoLogoutView
-from .forms import CustomUserCreationForm
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView as DjangoLoginView
+from django.contrib.auth.views import LogoutView as DjangoLogoutView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, TemplateView
 from django_smart_ratelimit.decorator import rate_limit
-from django.utils.decorators import method_decorator
+
 from common.ratelimit_key import rate_key
+
+from .forms import CustomUserCreationForm
 
 
 @method_decorator(

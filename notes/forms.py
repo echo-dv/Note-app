@@ -1,5 +1,6 @@
 from django import forms
-from .models import Note, Comment
+
+from .models import Comment, Note
 
 
 class NoteForm(forms.ModelForm):

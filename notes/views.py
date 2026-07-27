@@ -1,23 +1,25 @@
-from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db import transaction
+from django.db.models import Count, Exists, OuterRef, Prefetch, Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.decorators.http import require_POST
 from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
     ListView,
     UpdateView,
-    DeleteView,
-    CreateView,
-    DetailView,
 )
-from django.urls import reverse_lazy
-from django.http import JsonResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q, Prefetch, Count, Exists, OuterRef
-from django.db import transaction
-from .models import Note, Like, Comment
-from .forms import NoteForm, CommentForm
 from django_smart_ratelimit.decorator import rate_limit
-from django.utils.decorators import method_decorator
+
 from common.ratelimit_key import rate_key
+
+from .forms import CommentForm, NoteForm
+from .models import Comment, Like, Note
 
 
 @method_decorator(

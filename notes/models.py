@@ -1,6 +1,6 @@
-from django.db import models
-from django.core.validators import MaxLengthValidator
 from django.conf import settings
+from django.core.validators import MaxLengthValidator
+from django.db import models
 
 
 class NoteQuerySet(models.QuerySet):
@@ -47,5 +47,7 @@ class Like(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["owner", "note"], name="uniq_like_user_note")
+            models.UniqueConstraint(
+                fields=["owner", "note"], name="uniq_like_user_note"
+            )
         ]
