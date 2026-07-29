@@ -10,4 +10,5 @@ class CustomUser(AbstractUser):
         verbose_name_plural = "users"
 
     def __str__(self):
-        return self.get_full_name() or self.username
+        full_name = self.get_full_name().strip()
+        return full_name or self.username
