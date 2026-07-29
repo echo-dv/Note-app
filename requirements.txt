@@ -4,5 +4,4 @@ django-smart-ratelimit==4.12.1
 gunicorn==26.0.0
 packaging==26.2
 psycopg==3.3.4
-psycopg-binary==3.3.4
 sqlparse==0.5.5

@@ -1,13 +1,13 @@
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+
 class RegisterViewTests(TestCase):
-    
     def test_register_happy_path(self):
-        url = reverse('accounts:register')
+        url = reverse("accounts:register")
 
         data = {
             "username": "test123",
@@ -16,16 +16,16 @@ class RegisterViewTests(TestCase):
             "email": "test@test.com",
             "password1": "StrongPass123!!",
             "password2": "StrongPass123!!",
-            "bio": "hello"
+            "bio": "hello",
         }
 
         response = self.client.post(url, data)
 
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(User.objects.filter(username='test123').exists())
+        self.assertTrue(User.objects.filter(username="test123").exists())
 
     def test_register_missing_fields(self):
-        url = reverse('accounts:register')
+        url = reverse("accounts:register")
 
         data = {
             "username": "",
@@ -41,50 +41,42 @@ class RegisterViewTests(TestCase):
 
 
 class LoginViewTests(TestCase):
-    
     def setUp(self):
         self.user = User.objects.create_user(
-            username='test123',
-            password="StrongPass123!!"
+            username="test123", password="StrongPass123!!"
         )
-    
+
     def test_login_happy_path(self):
-        url = reverse('accounts:login')
+        url = reverse("accounts:login")
 
-        response = self.client.post(url, {
-            "username": "test123",
-            "password": "StrongPass123!!"
-        })
+        response = self.client.post(
+            url, {"username": "test123", "password": "StrongPass123!!"}
+        )
 
-        user_id = self.client.session.get('_auth_user_id')
+        user_id = self.client.session.get("_auth_user_id")
 
         self.assertEqual(response.status_code, 302)
         self.assertIsNotNone(user_id)
 
     def test_login_missing_password(self):
-        url = reverse('accounts:login')
+        url = reverse("accounts:login")
 
-        response = self.client.post(url, {
-            "username": "test123",
-            "password": ""
-        })
+        response = self.client.post(url, {"username": "test123", "password": ""})
 
-        user_id = self.client.session.get('_auth_user_id')
+        user_id = self.client.session.get("_auth_user_id")
 
         self.assertEqual(response.status_code, 200)
         self.assertIsNone(user_id)
 
 
 class HomeViewTests(TestCase):
-
     def setUp(self):
         self.user = User.objects.create_user(
-            username='test123',
-            password="StrongPass123!!"
+            username="test123", password="StrongPass123!!"
         )
 
     def test_home_happy_path(self):
-        url = reverse('accounts:home')
+        url = reverse("accounts:home")
 
         self.client.login(username="test123", password="StrongPass123!!")
 
@@ -93,7 +85,7 @@ class HomeViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_home_without_login(self):
-        url = reverse('accounts:home')
+        url = reverse("accounts:home")
 
         response = self.client.get(url)
 

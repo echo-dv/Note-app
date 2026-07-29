@@ -1,32 +1,66 @@
-from django.contrib.auth.views import LoginView, LogoutView
-from .forms import CustomUserCreationForm
-from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView as DjangoLoginView
+from django.contrib.auth.views import LogoutView as DjangoLogoutView
+from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, TemplateView
 from django_smart_ratelimit.decorator import rate_limit
-from django.utils.decorators import method_decorator
-from core.ratelimit_key import rate_key
+
+from common.ratelimit_key import rate_key
+
+from .forms import CustomUserCreationForm
 
 
-@method_decorator(rate_limit(key=rate_key, rate="30/h", algorithm="token_bucket", algorithm_config={'bucket_size': 5, 'refill': 30 / 3600}), name="dispatch")
-class CustomLoginView(LoginView):
-    template_name = 'accounts/login.html'
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="30/h",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 5, "refill": 30 / 3600},
+    ),
+    name="post",
+)
+class LoginView(DjangoLoginView):
+    template_name = "accounts/login.html"
     redirect_authenticated_user = True
-    success_url = reverse_lazy('accounts:home')
 
 
-@method_decorator(rate_limit(key=rate_key, rate="30/h", algorithm="token_bucket", algorithm_config={'bucket_size': 5, 'refill': 30 / 3600}), name="dispatch")
-class CustomRegisterView(CreateView):
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="30/h",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 5, "refill": 30 / 3600},
+    ),
+    name="post",
+)
+class RegisterView(CreateView):
     form_class = CustomUserCreationForm
-    template_name = 'accounts/register.html'
-    success_url = reverse_lazy('accounts:login')
-    
+    template_name = "accounts/register.html"
+    success_url = reverse_lazy("accounts:login")
 
-@method_decorator(rate_limit(key=rate_key, rate="60/m", algorithm="token_bucket", algorithm_config={'bucket_size': 40, 'refill': 60 / 60}), name="dispatch")
+
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="60/m",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 40, "refill": 60 / 60},
+    ),
+    name="dispatch",
+)
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = "accounts/home.html"
 
 
-@method_decorator(rate_limit(key=rate_key, rate="30/m", algorithm="token_bucket", algorithm_config={'bucket_size': 10, 'refill': 30 / 60}), name="dispatch")
-class CustomLogoutview(LogoutView):
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="30/m",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 10, "refill": 30 / 60},
+    ),
+    name="dispatch",
+)
+class LogoutView(DjangoLogoutView):
     pass
