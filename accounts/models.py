@@ -3,7 +3,9 @@ from django.db import models
 
 
 class CustomUser(AbstractUser):
-    bio = models.CharField(max_length=250, blank=True, verbose_name="about you")
+    bio = models.CharField(
+        max_length=250, blank=True, default="", verbose_name="about you"
+    )
 
     class Meta:
         verbose_name = "user"
