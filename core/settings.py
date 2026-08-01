@@ -36,6 +36,7 @@ ALLOWED_HOSTS = [
 INSTALLED_APPS = [
     "notes",
     "accounts",
+    "landing",
     "django.contrib.admin",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
