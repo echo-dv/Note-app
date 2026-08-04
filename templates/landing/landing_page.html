@@ -1,0 +1,129 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Notes - Write and Share Ideas</title>
+
+    <meta name="description" content="Create private notes, share ideas and interact with others.">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li>
+                    <a href="{% url 'accounts:login' %}">
+                        Login
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'accounts:register' %}">
+                        Register
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h1>
+                Write your thoughts.
+                Keep them organized.
+                Share what matters.
+            </h1>
+            <p>
+                Create personal notes, publish ideas,
+                and interact with a community.
+            </p>
+            <a href="{% url 'accounts:register' %}">
+                Start writing
+            </a>
+            <a href="{% url 'accounts:login' %}">
+                Login
+            </a>
+        </section>
+        <section>
+            <h2>
+                Features
+            </h2>
+            <article>
+                <h3>
+                    Private Notes
+                </h3>
+                <p>
+                    Write and store your personal notes securely.
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Public Notes
+                </h3>
+                <p>
+                    Share selected notes with other users.
+                </p>
+            </article>
+            <article>
+                <h3>
+                    Community Interaction
+                </h3>
+                <p>
+                    Like and comment on public notes.
+                </p>
+            </article>
+        </section>
+        <section>
+            <h2>
+                How it works
+            </h2>
+            <ol>
+                <li>
+                    <h3>
+                        Create an account
+                    </h3>
+                    <p>
+                        Register and create your personal space.
+                    </p>
+                </li>
+                <li>
+                    <h3>
+                        Write notes
+                    </h3>
+                    <p>
+                        Save your ideas and organize your information.
+                    </p>
+                </li>
+                <li>
+                    <h3>
+                        Share your ideas
+                    </h3>
+                    <p>
+                        Make notes public and receive feedback.
+                    </p>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>
+                Ready to start?
+            </h2>
+            <p>
+                Create your account and write your first note.
+            </p>
+            <a href="{% url 'accounts:register' %}">
+                Create Account
+            </a>
+        </section>
+    </main>
+    <footer>
+        <p>
+            © {% now "Y" %} Notes
+        </p>
+    </footer>
+</body>
+
+</html>
