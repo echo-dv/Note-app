@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.username }}'s Profile</title>
+</head>
+
+<body>
+
+    <h1>{{ profile.username }}</h1>
+
+    <section>
+        <h2>Profile</h2>
+
+        <p>
+            <strong>Joined:</strong>
+            {{ profile.date_joined }}
+        </p>
+        {% if profile.bio %}
+        <p>
+            <strong>Bio:</strong>
+            {{ profile.bio|linebreaksbr }}
+        </p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Stats</h2>
+
+        <ul>
+            <li>Notes: {{ profile.note_count }}</li>
+            <li>Likes given: {{ profile.given_like_count }}</li>
+            <li>Likes received: {{ profile.received_like_count }}</li>
+            <li>Comments given: {{ profile.given_comment_count }}</li>
+            <li>Comments received: {{ profile.received_comment_count }}</li>
+        </ul>
+    </section>
+
+</body>
+
+</html>
