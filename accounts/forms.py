@@ -17,3 +17,10 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields["username"].help_text = None
         self.fields["password1"].help_text = None
         self.fields["password2"].help_text = None
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ("first_name", "last_name", "bio")
+        widgets = {"bio": forms.Textarea(attrs={"rows": 4})}

@@ -6,12 +6,12 @@ from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, DetailView, TemplateView
+from django.views.generic import CreateView, DetailView, TemplateView, UpdateView
 from django_smart_ratelimit.decorator import rate_limit
 
 from common.ratelimit_key import rate_key
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileUpdateForm
 
 User = get_user_model()
 
@@ -70,6 +70,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
 class LogoutView(DjangoLogoutView):
     pass
 
+
 @method_decorator(
     rate_limit(
         key=rate_key,
@@ -94,3 +95,13 @@ class ProfileView(DetailView):
             received_like_count=Count("notes__likes", distinct=True),
             received_comment_count=Count("notes__comments", distinct=True),
         )
+
+
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = User
+    form_class = ProfileUpdateForm
+    template_name = "accounts/profile_update.html"
+    success_url = reverse_lazy("accounts:home")
+
+    def get_object(self):
+        return self.request.user
