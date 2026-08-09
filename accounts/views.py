@@ -70,7 +70,15 @@ class HomeView(LoginRequiredMixin, TemplateView):
 class LogoutView(DjangoLogoutView):
     pass
 
-
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="60/m",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 40, "refill": 1},
+    ),
+    name="dispatch",
+)
 class ProfileView(DetailView):
     model = User
     template_name = "accounts/profile.html"
