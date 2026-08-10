@@ -97,6 +97,15 @@ class ProfileView(DetailView):
         )
 
 
+@method_decorator(
+    rate_limit(
+        key=rate_key,
+        rate="20/m",
+        algorithm="token_bucket",
+        algorithm_config={"bucket_size": 30, "refill": 3},
+    ),
+    name="dispatch",
+)
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = ProfileUpdateForm
