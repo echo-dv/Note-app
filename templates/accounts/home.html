@@ -1,5 +1,11 @@
 <h1>Welcome, {{ user.username }}</h1>
 
+<h3>My Profile</h3>
+<ul>
+    <li><a href="{% url 'accounts:profile' user.username %}">View My Profile</a></li>
+    <li><a href="{% url 'accounts:profile_update' %}">Edit My Profile</a></li>
+</ul>
+
 <h3>How can i help you?</h3>
 <ul>
     <li><a href="{% url 'notes:list' %}">View My Notes</a></li>
