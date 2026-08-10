@@ -37,7 +37,7 @@
 
 {% for comment in comments %}
     <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-        <p><strong>{{ comment.owner.username }}</strong></p>
+        <p><strong><a href="{% url 'accounts:profile' comment.owner.username %}">{{ comment.owner.username }}</a></strong></p>
         <p>{{ comment.content }}</p>
     </div>
 {% empty %}
