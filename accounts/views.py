@@ -102,7 +102,7 @@ class ProfileView(DetailView):
         key=rate_key,
         rate="20/m",
         algorithm="token_bucket",
-        algorithm_config={"bucket_size": 30, "refill": 3},
+        algorithm_config={"bucket_size": 30, "refill": 20 / 60},
     ),
     name="dispatch",
 )
