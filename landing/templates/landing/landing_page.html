@@ -1,129 +1,34 @@
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Notes - Write and Share Ideas</title>
-
-    <meta name="description" content="Create private notes, share ideas and interact with others.">
-</head>
-
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li>
-                    <a href="{% url 'accounts:login' %}">
-                        Login
-                    </a>
-                </li>
-                <li>
-                    <a href="{% url 'accounts:register' %}">
-                        Register
-                    </a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section>
-            <h1>
-                Write your thoughts.
-                Keep them organized.
-                Share what matters.
-            </h1>
-            <p>
-                Create personal notes, publish ideas,
-                and interact with a community.
-            </p>
-            <a href="{% url 'accounts:register' %}">
-                Start writing
-            </a>
-            <a href="{% url 'accounts:login' %}">
-                Login
-            </a>
-        </section>
-        <section>
-            <h2>
-                Features
-            </h2>
-            <article>
-                <h3>
-                    Private Notes
-                </h3>
-                <p>
-                    Write and store your personal notes securely.
-                </p>
-            </article>
-            <article>
-                <h3>
-                    Public Notes
-                </h3>
-                <p>
-                    Share selected notes with other users.
-                </p>
-            </article>
-            <article>
-                <h3>
-                    Community Interaction
-                </h3>
-                <p>
-                    Like and comment on public notes.
-                </p>
-            </article>
-        </section>
-        <section>
-            <h2>
-                How it works
-            </h2>
-            <ol>
-                <li>
-                    <h3>
-                        Create an account
-                    </h3>
-                    <p>
-                        Register and create your personal space.
-                    </p>
-                </li>
-                <li>
-                    <h3>
-                        Write notes
-                    </h3>
-                    <p>
-                        Save your ideas and organize your information.
-                    </p>
-                </li>
-                <li>
-                    <h3>
-                        Share your ideas
-                    </h3>
-                    <p>
-                        Make notes public and receive feedback.
-                    </p>
-                </li>
-            </ol>
-        </section>
-        <section>
-            <h2>
-                Ready to start?
-            </h2>
-            <p>
-                Create your account and write your first note.
-            </p>
-            <a href="{% url 'accounts:register' %}">
-                Create Account
-            </a>
-        </section>
-    </main>
-    <footer>
-        <p>
-            © {% now "Y" %} Notes
-        </p>
-    </footer>
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block title %}Notes · Write what matters{% endblock %}
+{% block content %}
+<section class="landing">
+    <div class="landing-content">
+        <div class="eyebrow">PERSONAL KNOWLEDGE SPACE</div>
+        <h1>Write it down.<span>Keep it yours.</span></h1>
+        <p class="landing-description">A simple place for notes, ideas and thoughts. Keep them private or share them with everyone.</p>
+        <div class="landing-actions">
+            <a href="{% url 'accounts:register' %}" class="button button-primary button-large">Create account</a>
+            <a href="{% url 'notes:public_feed' %}" class="button button-secondary button-large">Explore public notes</a>
+        </div>
+    </div>
+    <div class="landing-card">
+        <div class="fake-window">
+            <div class="fake-window-header">
+                <div class="window-dots"><span></span><span></span><span></span></div>
+                <span>private_note.md</span>
+            </div>
+            <div class="fake-window-body">
+                <div class="fake-line fake-line-title">Things worth remembering</div>
+                <div class="fake-line">Keep ideas simple.</div>
+                <div class="fake-line">Write first. Organize later.</div>
+                <div class="fake-line fake-line-muted"># personal</div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="landing-features">
+    <article><span class="feature-number">01</span><h2>Private by default</h2><p>Your notes stay private unless you explicitly publish them.</p></article>
+    <article><span class="feature-number">02</span><h2>Simple editing</h2><p>No complicated editor. Just write and save.</p></article>
+    <article><span class="feature-number">03</span><h2>Public discussion</h2><p>Published notes can receive comments and likes.</p></article>
+</section>
+{% endblock %}
