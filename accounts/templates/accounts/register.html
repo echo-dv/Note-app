@@ -1,9 +1,26 @@
-<h1>Register</h1>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
-
-<a href="{% url 'accounts:login' %}">Back to Login</a>
+{% extends "base.html" %}
+{% block title %}Create account · Notes{% endblock %}
+{% block content %}
+<section class="auth-page">
+<div class="auth-card auth-card-wide">
+    <div class="auth-header"><span class="eyebrow">GET STARTED</span><h1>Create account</h1><p>A username, a password and you're in.</p></div>
+    {% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+    <form method="post" class="form-stack">
+        {% csrf_token %}
+        <div class="form-grid">
+            <div class="form-field"><label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}{% for error in form.username.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+            <div class="form-field"><label for="{{ form.email.id_for_label }}">Email</label>{{ form.email }}{% for error in form.email.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+            <div class="form-field"><label for="{{ form.first_name.id_for_label }}">First name</label>{{ form.first_name }}</div>
+            <div class="form-field"><label for="{{ form.last_name.id_for_label }}">Last name</label>{{ form.last_name }}</div>
+        </div>
+        <div class="form-field"><label for="{{ form.bio.id_for_label }}">About you</label>{{ form.bio }}{% for error in form.bio.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        <div class="form-grid">
+            <div class="form-field"><label for="{{ form.password1.id_for_label }}">Password</label>{{ form.password1 }}{% for error in form.password1.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+            <div class="form-field"><label for="{{ form.password2.id_for_label }}">Confirm password</label>{{ form.password2 }}{% for error in form.password2.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+        </div>
+        <button type="submit" class="button button-primary button-full">Create account</button>
+    </form>
+    <div class="auth-footer">Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></div>
+</div>
+</section>
+{% endblock %}
