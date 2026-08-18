@@ -1,9 +1,15 @@
-<h1>{% if object %}Edit Note{% else %}New Note{% endif %}</h1>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
+{% extends "base.html" %}
+{% block title %}{% if object %}Edit note{% else %}New note{% endif %} · Notes{% endblock %}
+{% block content %}
+<section class="page-container narrow-container">
+<div class="form-page-header"><span class="eyebrow">{% if object %}EDIT NOTE{% else %}NEW NOTE{% endif %}</span><h1>{% if object %}Edit note{% else %}Create a note{% endif %}</h1><p>Write it clearly. Future-you is going to read this.</p></div>
+<form method="post" class="note-editor">
+{% csrf_token %}
+{% if form.non_field_errors %}<div class="alert alert-error">{{ form.non_field_errors }}</div>{% endif %}
+<div class="form-field"><label for="{{ form.title.id_for_label }}">Title</label>{{ form.title }}{% for error in form.title.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+<div class="form-field"><label for="{{ form.content.id_for_label }}">Content</label>{{ form.content }}<div class="field-hint">Maximum 4000 characters.</div>{% for error in form.content.errors %}<small class="field-error">{{ error }}</small>{% endfor %}</div>
+<div class="publish-control"><div><strong>Make this note public</strong><span>Public notes can be read, liked and commented on.</span></div><label class="toggle">{{ form.is_public }}<span class="toggle-slider"></span></label></div>
+<div class="form-actions"><a href="{% if object %}{% url 'notes:detail' object.pk %}{% else %}{% url 'notes:list' %}{% endif %}" class="button button-secondary">Cancel</a><button type="submit" class="button button-primary">{% if object %}Save changes{% else %}Create note{% endif %}</button></div>
 </form>
-
-<a href="{% url 'notes:list' %}">Back to List</a>
+</section>
+{% endblock %}

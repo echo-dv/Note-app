@@ -1,43 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ profile.username }}'s Profile</title>
-</head>
-
-<body>
-
-    <h1>{{ profile.username }}</h1>
-
-    <section>
-        <h2>Profile</h2>
-
-        <p>
-            <strong>Joined:</strong>
-            {{ profile.date_joined }}
-        </p>
-        {% if profile.bio %}
-        <p>
-            <strong>Bio:</strong>
-            {{ profile.bio|linebreaksbr }}
-        </p>
-        {% endif %}
-    </section>
-
-    <section>
-        <h2>Stats</h2>
-
-        <ul>
-            <li>Notes: {{ profile.note_count }}</li>
-            <li>Likes given: {{ profile.given_like_count }}</li>
-            <li>Likes received: {{ profile.received_like_count }}</li>
-            <li>Comments given: {{ profile.given_comment_count }}</li>
-            <li>Comments received: {{ profile.received_comment_count }}</li>
-        </ul>
-    </section>
-
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block title %}@{{ profile.username }} · Notes{% endblock %}
+{% block content %}
+<section class="page-container">
+<div class="profile-header">
+    <div class="profile-avatar">{{ profile.username|first|upper }}</div>
+    <div class="profile-main">
+        <span class="eyebrow">PROFILE</span>
+        <h1>{% if profile.get_full_name %}{{ profile.get_full_name }}{% else %}@{{ profile.username }}{% endif %}</h1>
+        <div class="profile-username">@{{ profile.username }}</div>
+        {% if profile.bio %}<p class="profile-bio">{{ profile.bio }}</p>{% endif %}
+    </div>
+    {% if profile == user %}<a href="{% url 'accounts:profile_update' %}" class="button button-secondary">Edit profile</a>{% endif %}
+</div>
+<div class="stats-grid">
+    <div class="stat-card"><span class="stat-value">{{ profile.note_count }}</span><span class="stat-label">Notes</span></div>
+    <div class="stat-card"><span class="stat-value">{{ profile.received_like_count }}</span><span class="stat-label">Likes received</span></div>
+    <div class="stat-card"><span class="stat-value">{{ profile.received_comment_count }}</span><span class="stat-label">Comments received</span></div>
+    <div class="stat-card"><span class="stat-value">{{ profile.given_like_count }}</span><span class="stat-label">Likes given</span></div>
+    <div class="stat-card"><span class="stat-value">{{ profile.given_comment_count }}</span><span class="stat-label">Comments given</span></div>
+</div>
+{% if profile == user %}<div class="profile-links"><a href="{% url 'notes:list' %}" class="dashboard-card"><div><h2>Your notes</h2><p>Manage your notes.</p></div><span class="card-arrow">→</span></a></div>{% endif %}
+</section>
+{% endblock %}

@@ -1,97 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Note Detail</title>
-</head>
-<body>
-
-<h1>{{ note.title }}</h1>
-<p>{{ note.content }}</p>
-<p>Owner: {{ note.owner.username }}</p>
-
-<hr>
-
-{% if note.is_public %}
-<button id="like-btn">
-    {% if user_liked %}
-        Unlike
-    {% else %}
-        Like
-    {% endif %}
-</button>
-
-<p>Likes: <span id="like-count">{{ like_count }}</span></p>
-
-<hr>
-
-<h3>Add Comment</h3>
-<form method="post" action="{% url 'notes:add_comment' note.pk %}">
-    {% csrf_token %}
-    {{ comment_form.as_p }}
-    <button type="submit">Send</button>
-</form>
-
-<hr>
-
-<h3>Comments</h3>
-
-{% for comment in comments %}
-    <div style="border:1px solid #ccc; margin:10px; padding:10px;">
-        <p><strong><a href="{% url 'accounts:profile' comment.owner.username %}">{{ comment.owner.username }}</a></strong></p>
-        <p>{{ comment.content }}</p>
+{% extends "base.html" %}
+{% block title %}{{ note.title }} · Notes{% endblock %}
+{% block content %}
+<section class="page-container">
+<div class="detail-header">
+    <div>
+        <div class="note-meta">{% if note.is_public %}<span class="status status-public">PUBLIC</span>{% else %}<span class="status status-private">PRIVATE</span>{% endif %}<span>{{ note.updated_at|date:"M d, Y · H:i" }}</span></div>
+        <h1>{{ note.title }}</h1>
+        <div class="author-line">Written by <a href="{% url 'accounts:profile' note.owner.username %}">@{{ note.owner.username }}</a></div>
     </div>
-{% empty %}
-    <p>No comments yet</p>
-{% endfor %}
-
-{% else %}
-
-<p><i>This note is private. No interactions allowed.</i></p>
-
-{% endif %}
-
+    {% if note.owner == user %}<div class="detail-actions"><a href="{% url 'notes:update' note.pk %}" class="button button-secondary">Edit</a><a href="{% url 'notes:delete' note.pk %}" class="button button-danger">Delete</a></div>{% endif %}
+</div>
+<article class="note-content">{{ note.content|linebreaks }}</article>
 {% if note.is_public %}
-<script>
-const likeBtn = document.getElementById("like-btn");
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-        const cookies = document.cookie.split(";");
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.startsWith(name + "=")) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
-if (likeBtn) {
-    likeBtn.addEventListener("click", function() {
-        fetch("{% url 'notes:toggle_like' note.pk %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken"),
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
-
-            document.getElementById("like-count").innerText = data.like_count;
-            likeBtn.innerText = data.liked ? "Unlike" : "Like";
-        });
-    });
-}
-</script>
+<div class="interaction-bar">
+{% if note.owner != user %}
+<button type="button" class="like-button {% if user_liked %}is-liked{% endif %}" data-like-button data-like-url="{% url 'notes:toggle_like' note.pk %}">
+    <span data-like-icon>{% if user_liked %}♥{% else %}♡{% endif %}</span>
+    <span data-like-label>{% if user_liked %}Liked{% else %}Like{% endif %}</span>
+    <span class="like-count" data-like-count>{{ like_count }}</span>
+</button>
+{% else %}<div class="like-stat">♥ <span>{{ like_count }}</span> likes</div>{% endif %}
+</div>
+<section class="comments-section">
+<div class="section-heading"><div><span class="eyebrow">DISCUSSION</span><h2>Comments</h2></div><span class="comment-count">{{ comments|length }}</span></div>
+{% if user.is_authenticated %}
+<form method="post" action="{% url 'notes:add_comment' note.pk %}" class="comment-form">
+    {% csrf_token %}
+    {{ comment_form.content }}
+    {% for error in comment_form.content.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+    <div class="comment-form-footer"><span>Be useful. The internet has enough noise.</span><button type="submit" class="button button-primary button-small">Comment</button></div>
+</form>
+{% else %}
+<div class="login-prompt"><p>You need an account to join the discussion.</p><a href="{% url 'accounts:login' %}" class="button button-secondary button-small">Sign in</a></div>
 {% endif %}
-
-</body>
-</html>
+<div class="comments-list">
+{% for comment in comments %}
+<article class="comment">
+    <div class="comment-avatar">{{ comment.owner.username|first|upper }}</div>
+    <div class="comment-body">
+        <div class="comment-header"><a href="{% url 'accounts:profile' comment.owner.username %}">@{{ comment.owner.username }}</a><time>{{ comment.created_at|date:"M d, Y · H:i" }}</time></div>
+        <p>{{ comment.content|linebreaksbr }}</p>
+    </div>
+</article>
+{% empty %}<div class="comments-empty">No comments yet.</div>{% endfor %}
+</div>
+</section>
+{% endif %}
+</section>
+{% endblock %}

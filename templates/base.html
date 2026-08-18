@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Notes{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar">
+    <div class="topbar-inner">
+        <a href="{% url 'landing:landing' %}" class="brand">
+            <span class="brand-mark">N</span><span class="brand-text">notes</span>
+        </a>
+        <nav class="main-nav">
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:home' %}">Home</a>
+                <a href="{% url 'notes:list' %}">Notes</a>
+                <a href="{% url 'notes:public_feed' %}">Explore</a>
+                <a href="{% url 'accounts:profile' user.username %}">Profile</a>
+                <form action="{% url 'accounts:logout' %}" method="post" class="nav-logout">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-button">Logout</button>
+                </form>
+            {% else %}
+                <a href="{% url 'notes:public_feed' %}">Explore</a>
+                <a href="{% url 'accounts:login' %}">Login</a>
+                <a href="{% url 'accounts:register' %}" class="nav-primary">Create account</a>
+            {% endif %}
+        </nav>
+        <button type="button" class="mobile-menu-button" aria-label="Open menu" aria-expanded="false" data-mobile-menu-button>
+            <span></span><span></span><span></span>
+        </button>
+    </div>
+</header>
+<main class="main-content">{% block content %}{% endblock %}</main>
+<footer class="footer">
+    <div class="footer-inner"><span>Notes</span><span>Built with Django</span></div>
+</footer>
+</div>
+<script src="{% static 'js/app.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

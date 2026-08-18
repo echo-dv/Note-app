@@ -1,19 +1,16 @@
-<h1>Welcome, {{ user.username }}</h1>
-
-<h3>My Profile</h3>
-<ul>
-    <li><a href="{% url 'accounts:profile' user.username %}">View My Profile</a></li>
-    <li><a href="{% url 'accounts:profile_update' %}">Edit My Profile</a></li>
-</ul>
-
-<h3>How can i help you?</h3>
-<ul>
-    <li><a href="{% url 'notes:list' %}">View My Notes</a></li>
-    <li><a href="{% url 'notes:create' %}">Create New Note</a></li>
-    <li><a href="{% url 'notes:public_feed' %}">Public Notes</a></li>
-</ul>
-
-<form action="{% url 'accounts:logout' %}" method="post">
-    {% csrf_token %}
-    <button type="submit">Logout</buttom>
-</form>
+{% extends "base.html" %}
+{% block title %}Home · Notes{% endblock %}
+{% block content %}
+<section class="page-container">
+<div class="page-header">
+    <div><span class="eyebrow">YOUR SPACE</span><h1>Welcome back, {{ user.first_name|default:user.username }}.</h1><p>Everything you've written, in one place.</p></div>
+    <a href="{% url 'notes:create' %}" class="button button-primary">+ New note</a>
+</div>
+<div class="dashboard-grid">
+    <a href="{% url 'notes:list' %}" class="dashboard-card"><span class="dashboard-icon">N</span><div><h2>My notes</h2><p>Create, edit and manage your notes.</p></div><span class="card-arrow">→</span></a>
+    <a href="{% url 'notes:public_feed' %}" class="dashboard-card"><span class="dashboard-icon">↗</span><div><h2>Explore</h2><p>Read notes shared by the community.</p></div><span class="card-arrow">→</span></a>
+    <a href="{% url 'accounts:profile' user.username %}" class="dashboard-card"><span class="dashboard-icon">@</span><div><h2>My profile</h2><p>View your public profile and activity.</p></div><span class="card-arrow">→</span></a>
+    <a href="{% url 'accounts:profile_update' %}" class="dashboard-card"><span class="dashboard-icon">⚙</span><div><h2>Edit my profile</h2><p>Update your profile information.</p></div><span class="card-arrow">→</span></a>
+</div>
+</section>
+{% endblock %}
