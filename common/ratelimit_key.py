@@ -3,6 +3,5 @@ def rate_key(group, request, *_, **__):
         return f"user:{request.user.id}"
 
     ua = request.META.get("HTTP_USER_AGENT")
-    ip = request.META.get("REMOTE_ADDR")
-
+    ip = request.META.get("HTTP_X_REAL_IP")
     return f"anon:{ip}:{ua}"

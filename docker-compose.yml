@@ -24,8 +24,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    expose:
-      - 8000
+    ports:
+      - "127.0.0.1:8000:8000"
     volumes:
       - staticfiles:/app/staticfiles
     healthcheck:
@@ -48,9 +48,8 @@ services:
   nginx:
     image: nginx:1.30-alpine
     container_name: nginx
+    network_mode: host
     restart: unless-stopped
-    ports:
-      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - ./htpasswd:/etc/nginx/.htpasswd:ro
