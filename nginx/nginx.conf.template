@@ -10,8 +10,8 @@ server {
     server_name ${NGINX_SERVER_NAME};
     http2 on;
 
-    ssl_certificate /etc/nginx/certs/localhost.pem;
-    ssl_certificate_key /etc/nginx/certs/localhost-key.pem;
+    ssl_certificate /etc/nginx/certs/${TLS_CERT_NAME};
+    ssl_certificate_key /etc/nginx/certs/${TLS_CERT_KEY};
 
     proxy_set_header X-Real-IP $remote_addr;
     proxy_set_header Host $host;
