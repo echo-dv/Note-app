@@ -21,4 +21,8 @@ RUN apt-get update && apt-get install -y libpq5 && rm -rf /var/lib/apt/lists/*
 COPY --from=builder /install /usr/local
 COPY . .
 
+RUN chmod +x ./entrypoint.sh
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+
 CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000"]

@@ -3,8 +3,8 @@ services:
     image: postgres:16
     container_name: pg_db
     restart: unless-stopped 
-    ports:
-      - "5432:5432"
+    expose:
+      - 5432
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -25,7 +25,9 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8000:8000"
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - staticfiles:/app/staticfiles
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/readiness/')"]
       interval: 10s
@@ -40,6 +42,29 @@ services:
       SECRET_KEY: ${SECRET_KEY}
       DEBUG: ${DEBUG}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS}
+
+
+  nginx:
+    image: nginx:1.30-alpine
+    container_name: nginx
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      NGINX_SERVER_NAME: ${NGINX_SERVER_NAME}
+      TLS_CERT_NAME: ${TLS_CERT_NAME}
+      TLS_CERT_KEY: ${TLS_CERT_KEY}
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf.template:/etc/nginx/templates/nginx.conf.template
+      - ./nginx/htpasswd:/etc/nginx/.htpasswd:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+      - staticfiles:/app/staticfiles:ro
+    depends_on:
+      web:
+        condition: service_healthy
+
 
 volumes: 
   postgres_data:
+  staticfiles:
